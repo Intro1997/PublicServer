@@ -1,6 +1,7 @@
 ## 说明
 
-使用 python reportlab 库拼接 png 图片，参考 https://github.com/mrbeann/jpg2pdf，应该也可以拼接 jpg 图片，目前没有测试。
+使用 python reportlab 库拼接 png 图片，参考 https://github.com/mrbeann/jpg2pdf。
+应该也可以拼接 jpg 图片，目前没有测试。
 
 ## 用法
 
