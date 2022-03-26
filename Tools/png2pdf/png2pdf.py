@@ -57,8 +57,6 @@ def img2pdf(imgDir,
         imgDir = imgDir.replace('\\', '/')
     if imgDir[-1] != '/':
         imgDir = (imgDir + '/')
-    if saveDir[-1] != '/':
-        saveDir = (saveDir + '/')
     if recursion == True:
         for i in os.listdir(imgDir):
             if os.path.isdir(os.path.abspath(os.path.join(imgDir, i))):
@@ -111,14 +109,20 @@ def img2pdf(imgDir,
     maxsize = (maxw, maxh)
 
     if pdfName == None:
+        print('[WARN] pdfName is None, use timestamp as pdf file name')
         pdfName = str(time.time())
 
     if pdfName.find('.pdf') == -1:
         pdfName = pdfName + '.pdf'
 
-    if saveDir == None:
+    if saveDir == None or not os.path.exists(saveDir):
+        print(
+            '[WARN] saveDir is None or not exist, save pdf file to source image directory'
+        )
         filename_pdf = imgDir + pdfName
     else:
+        if saveDir[-1] != '/':
+            saveDir = (saveDir + '/')
         filename_pdf = saveDir + pdfName
     '''
     pdfgen.canvas detail parameters check 
@@ -141,7 +145,7 @@ def img2pdf(imgDir,
 def main():
     img2pdf(imgDir="./test/srcPng",
             pictureType=['png'],
-            saveDir='./test/dstPdf')
+            saveDir='./test/dstdddPdf')
 
 
 if __name__ == '__main__':
