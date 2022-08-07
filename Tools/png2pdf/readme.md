@@ -41,7 +41,8 @@
     saveDir : directory to save the pdf
     pdfName : aim pdf file name, if None, use timestamp
 '''
-img2pdf(imgDir="./test/srcPng",
+    img2pdf(imgDir="./test/srcPng",
             pictureType=['png'],
-            saveDir='./test/dstPdf')
+            saveDir='./test/dstPdf',
+            rule=sort_rule)
 ```

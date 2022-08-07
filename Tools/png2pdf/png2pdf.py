@@ -1,3 +1,7 @@
+from curses.ascii import isdigit
+from cv2 import sort
+# refer https://stackoverflow.com/questions/4836710/is-there-a-built-in-function-for-string-natural-sort
+from natsort import natsorted
 import os
 import glob
 import platform
@@ -11,6 +15,14 @@ from reportlab.pdfgen import canvas
 from PIL import Image
 
 
+def sort_by(rule, img_dir, i):
+    if rule == 1:
+        return natsorted(glob.glob(os.path.join(img_dir, '*.' + i)),
+                         key=lambda x: x.lower())
+    return sorted(glob.glob(os.path.join(img_dir, '*.' + i)),
+                  key=lambda x: x.lower())
+
+
 def img2pdf(imgDir,
             recursion=None,
             pictureType=None,
@@ -19,18 +31,17 @@ def img2pdf(imgDir,
             height=None,
             fit=None,
             saveDir=None,
-            pdfName=None):
+            pdfName=None,
+            rule=1):
     """
     Parameters
     ----------
     imgDir : string
            directory of the source pictures
-
     recursion : boolean
                 None or False for no recursion
                 True for recursion to children folder
                 wether to recursion or not
-
     pictureType : list
                   type of pictures,for example :jpg,png...
     sizeMode : int
@@ -38,18 +49,14 @@ def img2pdf(imgDir,
            1 for pdf's pagesize is the min of all the pictures
            2 for pdf's pagesize is the given value of width and height
            to choose how to determine the size of pdf
-
     width : int
             width of the pdf page
-
     height : int
             height of the pdf page
-
     fit : boolean
            None or False for fit the picture size to pagesize
            True for keep the size of the pictures
            wether to keep the picture size or not
-
     saveDir : directory to save the pdf
     pdfName : aim pdf file name, if None, use timestamp
     """
@@ -63,16 +70,29 @@ def img2pdf(imgDir,
                 img2pdf(imgDir + i, recursion, pictureType, sizeMode, width,
                         height, fit, saveDir)
     filelist = []
+
     if pictureType == None:
         print("default use jpg image format!")
         filelist = glob.glob(os.path.join(imgDir, '*.jpg'))
     else:
         for i in pictureType:
             # sort by name
-            filelist.extend(sorted(glob.glob(os.path.join(imgDir, '*.' + i))))
+            # filelist.extend(sorted(glob.glob(os.path.join(imgDir, '*.' + i))))
+            filelist.extend(sort_by(rule, imgDir, i))
 
     maxw = 0
     maxh = 0
+
+    print('pdf order is:\n')
+    for i in filelist:
+        print("Page:%d %s" % (filelist.index(i), i))
+    print('is that order correct? [y:n]')
+    name = input()
+    if name != 'y' and name != 'Y':
+        print(
+            'file order not correct, please fix code or modify your file name!'
+        )
+        quit()
     '''
     change order of files
     file1 = filelist[0]
@@ -140,12 +160,28 @@ def img2pdf(imgDir,
             c.drawImage(filelist[i], 0, 0, maxw, maxh)
         c.showPage()
     c.save()
+    print('pdf has been save in %s' % (filename_pdf))
 
 
 def main():
-    img2pdf(imgDir="./test/srcPng",
-            pictureType=['png'],
-            saveDir='./test/dstdddPdf')
+    print(
+        "common sort:\n - before sort:['1','2','3','4','10','20','21']\n - after sort['1','10','2','20','21','3','4']"
+    )
+    print(
+        "nature sort:\n - before sort:['1','2','3','4','10','20','21']\n - after sort['1','2','3','4','10','20','21']"
+    )
+    print("please choose sort rule:\n 0: common\n 1: nature")
+    sort_rule = input()
+    if isdigit(sort_rule) and (int(sort_rule) == 0 or int(sort_rule) == 1):
+        sort_rule = int(sort_rule)
+    else:
+        print("unknown input, defult use nature")
+        sort_rule = 1
+
+    img2pdf(imgDir="../",
+            pictureType=['png', 'jpg'],
+            saveDir='./dstPdf',
+            rule=sort_rule)
 
 
 if __name__ == '__main__':
