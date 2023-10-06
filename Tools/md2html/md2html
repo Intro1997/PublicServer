@@ -1,0 +1,85 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+const execSync = require("child_process").execSync
+const path = require("path")
+
+function exist_binary(bin_name) {
+  const cmd = `${bin_name} --version`
+  let ret;
+  try {
+    ret = execSync(cmd, {
+      shell: "zsh"
+    });
+  } catch (err) {
+    console.error("md2html error: \n\t", err.stderr.toString())
+    console.error("This may caused by lack of showdown binary, check `showdown --version` to make sure that you have installed showdown.\nIf not installed, use `npm install -g showdown` command to install showdown.\n")
+    return false;
+  }
+  return true;
+}
+
+function convert(md_path, html_path, config_list) {
+  if (!fs.existsSync(html_path)) {
+    console.error(`md2html error:\n\t${html_path} no exist!`)
+    return;
+  }
+
+  if (!exist_binary("showdown")) {
+    return;
+  }
+  if (fs.statSync(html_path).isDirectory()) {
+    if (!html_path.endsWith('/')) { html_path += '/' }
+    html_path += `${path.parse(md_path).name}.html`
+  }
+
+  let cmd = `showdown makehtml -i ${md_path} -o ${html_path}`
+  let cmd_ret;
+  if (config_list.length > 0) {
+    cmd += " -c"
+  }
+  config_list.forEach(element => {
+    cmd += ` ${element}`
+  });
+
+  try {
+    cmd_ret = execSync(cmd, { shell: "zsh" });
+  } catch (err) {
+    console.error("md2html error: \n\t", err.stderr.toString())
+  }
+  console.log(cmd_ret.toString());
+  console.log(`Finish convert ${md_path} to html, save file to ${html_path}`);
+}
+
+let html_path = "."
+
+function print_help() {
+  console.log('  usage:');
+  console.log('  1. md2html <markdown-file>: output html file in current folder');
+  console.log('  2. md2html <markdown-file> <html-file>: output html file in specified file use same name as markdownfile');
+  console.log('  3. md2html <markdown-file> <html-folder>: output html file in specified folder');
+  console.log('  4. md2html <--help|-h>: print help message');
+}
+
+const argc = process.argv.length;
+
+if (argc < 3) {
+  console.error("Request at least one Parameter!\n")
+  return;
+}
+const argv2 = process.argv[2];
+if (argv2 == "-h" || argv2 == "--help") {
+  print_help()
+  return;
+} else if (fs.statSync(argv2).isDirectory()) {
+  console.error("Not support specify a folder as markdown files input\nuse --help or -h check usage")
+  return;
+}
+
+if (argc > 3) {
+  html_path = process.argv[3];
+}
+
+convert(argv2, html_path, ["tasklists", "tables", "disableForced4SpacesIndentedSublists", "completeHTMLDocument", "strikethrough"]);
+
+
