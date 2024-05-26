@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>文件上传</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="element-container">
+      <label for="file-uploader" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i> 上传文件
+      </label>
+      <input
+        id="file-uploader"
+        type="file"
+        onchange="saveFiles(this.files)"
+        multiple
+      />
+    </div>
+
+    <div class="element-container">
+      <textarea
+        id="text-to-copy"
+        placeholder="添加需要上传到服务器的文字信息"
+        rows="10"
+      ></textarea>
+      <br />
+      <button type="button" id="upload-text" onclick="uploadText()">
+        提交到服务器
+      </button>
+    </div>
+  </body>
+
+  <script>
+    const SERVER_URL = "http://192.168.0.103:20495/";
+    function UploadFileToServer(aim_file) {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(aim_file);
+      reader.onload = function (e) {
+        fetch(SERVER_URL + aim_file.name, {
+          method: "post",
+          body: e.target.result,
+        });
+      };
+    }
+
+    function saveFiles(files) {
+      for (let i = 0; i < files.length; i++) {
+        UploadFileToServer(files[i]);
+      }
+    }
+
+    function uploadText() {
+      const textarea_obj = document.getElementById("text-to-copy");
+      if (textarea_obj) {
+        const inner_content = textarea_obj.value;
+        fetch(SERVER_URL + "cmd/upload_text", {
+          method: "post",
+          body: inner_content,
+        });
+      }
+    }
+  </script>
+</html>

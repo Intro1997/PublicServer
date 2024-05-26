@@ -1,0 +1,20 @@
+@media screen and (max-device-width: 400px) {
+  body {
+    zoom: 5
+  }
+
+  .element-container {
+    margin-bottom: 5%;
+  }
+
+}
+
+@media screen and (min-device-width: 401px) {
+  body {
+    zoom: 2
+  }
+
+  .element-container {
+    margin-bottom: 2%;
+  }
+}
