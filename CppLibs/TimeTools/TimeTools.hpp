@@ -14,6 +14,19 @@ public:
   Time() = delete;
   static uint64_t GetCurrentTime(TimeUnit unit);
   static void Sleep(TimeUnit unit, uint64_t time);
+  template <TimeUnit left, TimeUnit right>
+  static double ConvertFromLeftTimeUnitToRight(const double &time_val) {
+    int32_t left_int_val = static_cast<int32_t>(left);
+    int32_t right_int_val = static_cast<int32_t>(right);
+    int32_t right_left_diff = right_int_val - left_int_val;
+
+    double ret = time_val;
+
+    if (right_left_diff != 0) {
+      ret = time_val * std::pow(1e3, right_left_diff);
+    }
+    return ret;
+  }
 };
 
 class RealTimer {
