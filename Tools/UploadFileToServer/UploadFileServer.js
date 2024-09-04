@@ -61,7 +61,7 @@ class UploadFileServer {
   }
 
   #getRequestType(req) {
-    console.log("requst url is: ", req.url);
+    console.log("request url is: ", req.url);
     if (this.#isCommandRequest(req)) {
       return REQ_TYPE_COMMAND;
     } else if (req.method === "GET") {
