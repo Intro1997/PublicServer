@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter.filedialog import askdirectory
-from TkinterDnD2 import *
+from tkinterdnd2 import *
 import ctypes
 import platform
 from Core import core

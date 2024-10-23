@@ -1,5 +1,5 @@
 import tkinter as tk
-from TkinterDnD2 import *
+from tkinterdnd2 import *
 import re
 
 # reference: https://stackoverflow.com/questions/4836710/is-there-a-built-in-function-for-string-natural-sort
