@@ -1,0 +1,16 @@
+{
+  "name": "gltfglbconverter",
+  "description": "refer to https://github.com/najadojo/gltf-import-export",
+  "version": "1.0.0",
+  "main": "demo.js",
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gltf-import-export": "^1.0.22"
+  }
+}
