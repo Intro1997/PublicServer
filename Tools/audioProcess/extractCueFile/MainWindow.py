@@ -19,6 +19,7 @@ TOP_LABEL_HOVER_TEXT = "松开鼠标以打开文件"
 OR_LABEL_TEXT = "或者"
 BUTTON_TEXT = "点击我选择 CUE 文件"
 ERROR_TEXT = "错误"
+NORMAL_TEXT = "提示"
 
 
 class MainWindow(QWidget):
@@ -179,7 +180,7 @@ class MainWindow(QWidget):
 
     def __selectCueFile(self):
         file = QFileDialog.getOpenFileName(
-            self, '选择 .cue 文件', "CUE 文件 (*.cue)")
+            self, '选择 .cue 文件')
         if file and file[0]:
             self.__displayCueInfo(file[0])
 
@@ -204,7 +205,7 @@ class MainWindow(QWidget):
         self.label.setText(TOP_LABEL_DEFAULT_TEXT)
 
     def __showNormalMessage(self, message):
-        QMessageBox.information(self, ERROR_TEXT, message)
+        QMessageBox.information(self, NORMAL_TEXT, message)
         self.label.setText(TOP_LABEL_DEFAULT_TEXT)
 
     def dropEvent(self, event):

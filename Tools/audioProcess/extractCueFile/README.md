@@ -6,6 +6,7 @@
 目前仅支持任意格式音频分割为 flac 格式，不支持格式转换，不支持切换输出格式。如果想更自由地进行切分，请使用 [FFcuesplitter](https://github.com/jeanslack/FFcuesplitter)。
 
 ## 运行方式
+系统中存在 ffmpeg，并且确保终端可以找到 ffmpeg。
 
 1. run `pip3 install -r requirements.txt`
 2. run `python3 main.py`
