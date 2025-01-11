@@ -56,9 +56,3 @@ class CueSpliter:
             return SplitRet(False, str(e))
         else:
             return SplitRet()
-
-
-try:
-    print(CueSpliter.getCueInfo("/Users/intro/Downloads/1.jpg"))
-except Exception as e:
-    print(e)
