@@ -1,0 +1,2 @@
+ffcuesplitter==1.0.25
+pyside6==6.8.1.1
