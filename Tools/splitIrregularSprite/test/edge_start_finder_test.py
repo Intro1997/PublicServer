@@ -2,11 +2,11 @@ import sys  # noqa
 sys.path.append("..")  # noqa
 
 from tools.edge_finder import SpriteEdgeStartFinder
-from tools.sprite_spliter import get_single_sprite_box_coord
+from tools.sprite_spliter import get_single_sprite_box_coord, AlphaSpriteSpliter
 from PIL import Image
 import traceback
 from tools.vec import Vec4D
-from test_tools import draw_box, split_to_file
+from test_tools import draw_box_vec, draw_box_tuple, split_to_file
 import time
 
 import cProfile
@@ -20,7 +20,7 @@ img_path = "assets/multiple_test1.png"
 # img_path = "assets/tmp.png"
 
 
-def test_func():
+def api_test_func():
     try:
         image = Image.open(img_path)
         background_color = Vec4D(0, 0, 0, 0)
@@ -49,7 +49,7 @@ def test_func():
             sprite_boxes.append(box)
 
         for box in sprite_boxes:
-            draw_box(image, box, Vec4D(255, 0, 0, 255), 1)
+            draw_box_vec(image, box, Vec4D(255, 0, 0, 255), 1)
         image.show()
 
     except Exception as e:
@@ -57,9 +57,31 @@ def test_func():
         traceback.print_exc()
 
 
-execution_time = timeit.timeit(test_func, number=1)
-print(f"Execution time: {execution_time} seconds")
+def class_test_func():
+    spliter = AlphaSpriteSpliter(img_path)
+    sprite_boxes = spliter.get_sprite_boxes()
+    # return sprite_boxes
 
-# cProfile.run('test_func()', './test_profile.txt')
+    # image = Image.open(img_path).convert("RGBA")
+    # for box in sprite_boxes:
+    #     draw_box_tuple(image, box, (255, 0, 0, 255), 1)
+    # image.show()
+
+
+# api_test_func()
+# class_test_func()
+
+
+# execution_time = timeit.timeit(api_test_func, number=1)
+# print(f"Execution time: {execution_time} seconds")
+
+# cProfile.run('api_test_func()', './test_profile.txt')
 # p = pstats.Stats('./test_profile.txt')
 # p.strip_dirs().sort_stats('cumtime').print_stats()
+
+# execution_time = timeit.timeit(class_test_func, number=1)
+# print(f"Execution time: {execution_time} seconds")
+
+cProfile.run('class_test_func()', './test_profile.txt')
+p = pstats.Stats('./test_profile.txt')
+p.strip_dirs().sort_stats('cumtime').print_stats()
