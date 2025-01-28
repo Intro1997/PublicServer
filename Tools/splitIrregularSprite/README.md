@@ -20,7 +20,7 @@ Please refer to [here](./docs/usage.md)
 
 ## Performance
 
-Platform: Python 3.12.7
+Platform: Python 3.12.7 <br/>
 CPU: Mac M3 Max
 
 ### EDGE DETECT
