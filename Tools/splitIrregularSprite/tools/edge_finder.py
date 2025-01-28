@@ -12,6 +12,7 @@ class AlphaSpriteEdgeStartFinder:
     def __init__(self, image: Image):
         if not image or image is None:
             raise ValueError("Image object is invalid!")
+        self._image_size = image.size
         self._image_pixel = image.convert("RGBA").load()
         self._ignore_area: List[Box] = []  # list of Box
         self._sline_pos: Tuple[int, int] = (0, 0)  # sline: scanner line
@@ -24,6 +25,10 @@ class AlphaSpriteEdgeStartFinder:
 
     def add_ignore_area(self, ignore_box: Box):
         self._ignore_area.append(ignore_box)
+        rx, ry = ignore_box.right_bottom_corner
+        iw, ih = self._image_size
+        if rx >= iw - 1 and ry >= ih - 1:
+            self._sline_pos = (rx, ry)
 
     def get_new_edge_start_pos(self) -> Tuple[int, int]:
         while not self._is_scan_end():
@@ -58,7 +63,7 @@ class AlphaSpriteEdgeStartFinder:
     def _update_sline_to_skip_box(self, box_id: int):
         if box_id < 0:
             return
-        
+
         rbc_x, _ = self._ignore_area[box_id].right_bottom_corner
         self._sline_pos = self._get_clamp_pos(rbc_x+1, self._sline_pos[1])
 

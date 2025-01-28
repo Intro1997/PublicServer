@@ -148,20 +148,26 @@ class AlphaSpriteSpliter:
             Box | None: Structure contains [left_top_corner_position, right_bottom_corner_position],
                         reutrn None if image load failed.
         """
-
+        iw, ih = self._image_size
         scanner_data = {
             "pos": list(valid_pixel_pos),
             "w": 1,
             "h": 1
         }
 
-        while True:
-            has_colored_edge = self._rect_scan_right(scanner_data)
+        has_colored_edge = True
+        while has_colored_edge:
+            has_colored_edge = False
+            has_colored_edge |= self._rect_scan_right(scanner_data)
             has_colored_edge |= self._rect_scan_down(scanner_data)
             has_colored_edge |= self._rect_scan_left(scanner_data)
             has_colored_edge |= self._rect_scan_up(scanner_data)
-            if not has_colored_edge:
+            if scanner_data['w'] >= iw and scanner_data['h'] >= ih:
                 break
+        if has_colored_edge:
+            left_top_pos = tuple(scanner_data["pos"])
+            return Box(left_top_pos, (left_top_pos[0] + scanner_data["w"] - 1,
+                                      left_top_pos[1] + scanner_data['h'] - 1))
 
         left_top_pos = (scanner_data["pos"][0] + 1, scanner_data["pos"][1] + 1)
         right_bottom_pos = (
