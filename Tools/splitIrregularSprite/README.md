@@ -1,3 +1,6 @@
+# Thanks 
+Sprite scan algorithm is inspired by [spriteSplitter](https://github.com/bmarwane/spriteSplitter).
+
 # SpriteSpliter
 
 ## Description
