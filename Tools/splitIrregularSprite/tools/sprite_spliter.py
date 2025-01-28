@@ -36,8 +36,8 @@ class SpliterAlgorithm(Enum):
     """
     Description
         EDGE_DETECT: A stricter algorithm that split any individual pixels as a sprite. But slower.
-        SPRITE_SCAN: A more relaxed algorithm will treat two areas separated by a transparent line as 
-                     two sprites; this makes it possible for two parts separated by a diagonal line to 
+        SPRITE_SCAN: A more relaxed algorithm will treat two areas separated by a transparent line as
+                     two sprites; this makes it possible for two parts separated by a diagonal line to
                      be treated as one sprite。
 
     """
@@ -50,7 +50,7 @@ class AlphaSpriteSpliter:
     This sprite spliter can only deal with RGBA image and auto convert alpha
     channel of RGB image to 255.
 
-    If the alpha channel of image is 0, it will be treated as background; 
+    If the alpha channel of image is 0, it will be treated as background;
     otherwise it will be treated as edge.
     """
 
@@ -197,7 +197,23 @@ class AlphaSpriteSpliter:
                 x += 1
             else:
                 break
+
         scanner_data["w"] = x - px
+
+        """
+        When deal with:
+        current pixel -> x 0
+                         0 x <- A pixel
+        (0 means transparent pixel)
+            this situation cannot find A pixel by detect on right
+        hand. So we add this pitch to expand width and height of 
+        scanner, to make A pixel in scan range.
+        """
+        if self._image_pixel[(x, py + scanner_data["h"])][3] != 0:
+            scanner_data["w"] += 1
+            scanner_data["h"] += 1
+            return True
+
         return has_colored_edge
 
     def _rect_scan_down(self, scanner_data) -> bool:
