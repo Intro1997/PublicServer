@@ -43,8 +43,6 @@ class AlphaSpriteEdgeStartFinder:
         return sl_x == i_w and sl_y == i_h
 
     def _update_sline_pos(self):
-        # self._sline_pos.x += 1
-        # self._safe_clamp_pos()
         x, y = self._sline_pos
         self._sline_pos = self._get_clamp_pos(x + 1, y)
 
@@ -60,46 +58,29 @@ class AlphaSpriteEdgeStartFinder:
     def _update_sline_to_skip_box(self, box_id: int):
         if box_id < 0:
             return
-        # self._sline_pos.x = self._ignore_area[box_id].right_bottom_corner.x + 1
-        # self._safe_clamp_pos()
+        
         rbc_x, _ = self._ignore_area[box_id].right_bottom_corner
         self._sline_pos = self._get_clamp_pos(rbc_x+1, self._sline_pos[1])
 
     def _is_scanner_in_ignore_area(self) -> int:
         box_idx = -1
-        del_idx_list = []
+        del_list = []
 
         index = 0
+        x, y = self._sline_pos
         for box in self._ignore_area:
-            if box.has_position(self._sline_pos):
+            if (box.left_top_corner[0] <= x and x <= box.right_bottom_corner[0])\
+                    and (box.left_top_corner[1] <= y and y <= box.right_bottom_corner[1]):
                 box_idx = index
                 break
             elif box.right_bottom_corner[1] < self._sline_pos[1]:
-                del_idx_list.append(index)
+                del_list.append(box)
             index += 1
-        self._remove_ignore_area_by_list(del_idx_list)
+        for box in del_list:
+            self._ignore_area.remove(box)
 
         return box_idx
 
-    def _remove_ignore_area_by_list(self, idx_list: List[int]):
-        tmp_buffer = []
-        # print(f"before {self._ignore_area}")
-        for idx in range(len(self._ignore_area)):
-            if idx not in idx_list:
-                tmp_buffer.append(self._ignore_area[idx])
-        self._ignore_area = tmp_buffer
-        # print(f"after {self._ignore_area}")
-
     def _is_pos_has_valid_color(self, pos: Tuple[int, int]):
-        # t = self._image.getpixel((pos.x, pos.y))
-        # if self._image_mode == IMG_RGBA_MODE:
-        #     pixel_vec = Vec4D(t[0], t[1], t[2], t[3])
-        # else:
-        #     pixel_vec = Vec3D(t[0], t[1], t[2])
-
-        # flag = (not common_equals(pixel_vec, self._invalid_color))
-        # if pixel_vec.channel_count == 4:
-        #     return flag and pixel_vec.w != 0
-        # return flag
         pixel_tuple: Tuple[int, int, int, int] = self._image_pixel[pos]
         return pixel_tuple[3] != 0

@@ -7,18 +7,23 @@ A sprite image spliter for rgba format image.
 ## Usage
 
 ```python
-from tools.sprite_spliter import AlphaSpriteSpliter
-
+from tools.sprite_spliter import AlphaSpriteSpliter, SpliterAlgorithm
 
 img_path = "test/assets/multiple_test0.png"
 spliter = AlphaSpriteSpliter(img_path)
 box_border_color = (255, 0, 0, 255)
-spliter.show_split_result(box_border_color)
+# default is SpliterAlgorithm.SPRITE_SCAN
+spliter.show_split_result(box_border_color, SpliterAlgorithm.EDGE_DETECT)
 ```
 
 Please refer to [here](./docs/usage.md)
 
 ## Performance
+
+Platform: Python 3.12.7
+CPU: Mac M3 Max
+
+### EDGE DETECT
 
 | image                                  | split time                  |
 | -------------------------------------- | --------------------------- |
@@ -26,6 +31,19 @@ Please refer to [here](./docs/usage.md)
 | assets/multiple_test1.png(2048 x 2048) | 2.9249990829848684 seconds  |
 | assets/multiple_test2.png(1024 x 512)  | 1.142435582994949 seconds   |
 | assets/tmp.png(1024 x 1024)            | 2.3546547499718145 seconds  |
+
+### SPRITE SCAN
+
+| image                                  | split time                  |
+| -------------------------------------- | --------------------------- |
+| assets/multiple_test0.png(104 x 113)   | 0.19917637499747798 seconds |
+| assets/multiple_test1.png(2048 x 2048) | 0.8949957919539884 seconds  |
+| assets/multiple_test2.png(1024 x 512)  | 0.3498120000003837 seconds  |
+| assets/tmp.png(1024 x 1024)            | 0.6984633749816567 seconds  |
+
+# Execution Result
+
+See [here](./docs/result.md)
 
 # Disclaimer
 
