@@ -1,7 +1,7 @@
 import sys  # noqa
 sys.path.append("..")  # noqa
 
-from tools.sprite_spliter import AlphaSpriteSpliter
+from tools.sprite_splitter import AlphaSpriteSplitter
 from PIL import Image
 from test_tools import draw_box_tuple
 
@@ -17,8 +17,8 @@ img_path = "assets/tmp.png"
 
 
 def class_test_func():
-    spliter = AlphaSpriteSpliter(img_path)
-    sprite_boxes = spliter.get_sprite_boxes()
+    splitter = AlphaSpriteSplitter(img_path)
+    sprite_boxes = splitter.get_sprite_boxes()
     # return sprite_boxes
 
     image = Image.open(img_path).convert("RGBA")

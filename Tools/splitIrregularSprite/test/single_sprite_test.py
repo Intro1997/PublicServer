@@ -2,7 +2,7 @@ import sys  # noqa
 sys.path.append("..")  # noqa
 
 import traceback
-from tools.sprite_spliter import AlphaSpriteSpliter
+from tools.sprite_splitter import AlphaSpriteSplitter
 import time
 from test_tools import draw_box, split_to_file
 
@@ -13,11 +13,11 @@ test_img_path = "assets/single_test0.png"
 def class_test():
     start_pos = (12, 4)
     try:
-        spliter = AlphaSpriteSpliter(test_img_path)
+        splitter = AlphaSpriteSplitter(test_img_path)
         start_time = time.time()
-        box = spliter._get_single_sprite_box_coord(start_pos)
+        box = splitter._get_single_sprite_box_coord(start_pos)
         end_time = time.time()
-        print(f"class: spliter spend {(end_time - start_time):.10f}second")
+        print(f"class: splitter spend {(end_time - start_time):.10f}second")
         print(
             f"class: image is in ({str(box.left_top_corner)}, {str(box.right_bottom_corner)})")
 

@@ -32,7 +32,7 @@ class Tuple2DMap:
             self.value_table.pop(tuple2d[0])
 
 
-class SpliterAlgorithm(Enum):
+class SplitterAlgorithm(Enum):
     """
     Description
         EDGE_DETECT: A stricter algorithm that split any individual pixels as a sprite. But slower.
@@ -45,9 +45,9 @@ class SpliterAlgorithm(Enum):
     SPRITE_SCAN = 1
 
 
-class AlphaSpriteSpliter:
+class AlphaSpriteSplitter:
     """
-    This sprite spliter can only deal with RGBA image and auto convert alpha
+    This sprite splitter can only deal with RGBA image and auto convert alpha
     channel of RGB image to 255.
 
     If the alpha channel of image is 0, it will be treated as background;
@@ -63,7 +63,7 @@ class AlphaSpriteSpliter:
         self._last_sprite_boxes: List[Box] | None = None
 
     def show_split_result(self, color: Tuple[int, int, int, int],
-                          algm: SpliterAlgorithm = SpliterAlgorithm.SPRITE_SCAN):
+                          algm: SplitterAlgorithm = SplitterAlgorithm.SPRITE_SCAN):
         self.show_split_result_by_boxes(self.get_sprite_boxes(algm), color)
 
     def show_split_result_by_boxes(self, boxes: List[Box], color: Tuple[int, int, int, int]):
@@ -75,7 +75,7 @@ class AlphaSpriteSpliter:
         image.show()
 
     def save_sprites(self, save_dir: str, file_prefix: str = "sprite",
-                     algm: SpliterAlgorithm = SpliterAlgorithm.SPRITE_SCAN):
+                     algm: SplitterAlgorithm = SplitterAlgorithm.SPRITE_SCAN):
         if self._image is None:
             print(f"Open image {self._image_path} failed.")
             return
@@ -104,7 +104,7 @@ class AlphaSpriteSpliter:
             file_idx += 1
         print(f"{file_idx} saved to {save_dir}")
 
-    def get_sprite_boxes(self, algm: SpliterAlgorithm = SpliterAlgorithm.SPRITE_SCAN) -> List[Box]:
+    def get_sprite_boxes(self, algm: SplitterAlgorithm = SplitterAlgorithm.SPRITE_SCAN) -> List[Box]:
         sprite_boxes = self._last_sprite_boxes
         if self._image is not None and sprite_boxes is None:
             sprite_boxes = []
@@ -113,7 +113,7 @@ class AlphaSpriteSpliter:
                 if edge_start_pos is None:
                     break
                 box = None
-                if algm == SpliterAlgorithm.EDGE_DETECT:
+                if algm == SplitterAlgorithm.EDGE_DETECT:
                     box = self._get_single_sprite_box_coord_by_edge_detect(
                         edge_start_pos)
                 else:

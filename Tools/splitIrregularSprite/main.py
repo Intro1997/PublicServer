@@ -1,6 +1,6 @@
-from tools.sprite_spliter import AlphaSpriteSpliter
+from tools.sprite_splitter import AlphaSpriteSplitter
 
 
-img_path = "test/assets/multiple_test0.png"
-spliter = AlphaSpriteSpliter(img_path)
-spliter.show_split_result((255, 0, 0, 255))
+img_path = "test/assets/tmp.png"
+splitter = AlphaSpriteSplitter(img_path)
+splitter.show_split_result((255, 0, 0, 255))
