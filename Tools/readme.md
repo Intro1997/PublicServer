@@ -17,3 +17,4 @@
 - png2pdf: 拼接多个 png 为一个 pdf
 - splitIrregularSprite: 从一个 RGBA 图片中提取 sprite 图
 - video2gif: 视频转 gif
+- Video2Text: b23 视频转文本工具
